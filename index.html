@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lingua Ladder · A1'den C2'ye</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1f2937;--mut:#6b7280;--p:#2f4b7c;--p2:#5b7aa6;--ok:#2f855a;--bad:#c0392b;--y:#b7791f;--line:#e3e6eb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181d26;--tx:#e8eaee;--mut:#98a1b0;--line:#2a313d;--p:#8fb0e6;--p2:#7f9cc9}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181d26;--tx:#e8eaee;--mut:#98a1b0;--line:#2a313d;--p:#8fb0e6;--p2:#7f9cc9}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding:14px 14px 40px}
+.brand{font-weight:900;font-size:22px;color:var(--p);letter-spacing:.3px;margin:6px 4px 10px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;padding:6px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+.tab{border:0;border-radius:12px;padding:12px 4px;font-weight:800;font-size:14px;color:#fff;cursor:pointer;opacity:.62;transition:.2s;transform:scale(.97)}
+.tab.on{opacity:1;transform:scale(1.03);box-shadow:0 8px 20px #0003}
+.t0{background:#2f4b7c}.t1{background:#2f6f68}.t2{background:#5a4f7c}.t3{background:#8a5a44}
+.card{background:var(--card);border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 10px 30px #5b3df51a;border:1px solid var(--line);animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{margin:0 0 6px;font-size:22px}h3{margin:14px 0 6px;font-size:15px;color:var(--p)}p{line-height:1.55;margin:6px 0}.mut{color:var(--mut);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.box{border:0;border-radius:18px;padding:16px 12px;color:#fff;font-weight:800;font-size:15px;cursor:pointer;text-align:center;min-height:70px;transition:.15s}
+.box:hover{transform:translateY(-2px)}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:800;font-size:15px;cursor:pointer;color:#fff;background:var(--p)}
+.btn.g{background:var(--ok)}.btn.o{background:transparent;color:var(--p);border:2px solid var(--p)}.btn.r{background:var(--bad)}.btn:disabled{opacity:.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,textarea{width:100%;padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--tx);font-size:16px;font-family:inherit;outline:none}
+input:focus,textarea:focus{border-color:var(--p)}textarea{min-height:170px;resize:vertical}
+.chip{border:2px solid var(--line);background:transparent;color:var(--tx);border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer}.chip.on{background:var(--p);border-color:var(--p);color:#fff}
+.word{font-size:40px;font-weight:900;text-align:center;margin:10px 0;color:var(--p);font-family:Georgia,serif}
+.hint{background:#f6f1e4;color:#4a3b14;border-radius:14px;padding:12px 14px;border-left:5px solid var(--y)}
+.good{background:#e4f1ea;color:#1f4d36;border-radius:14px;padding:12px 14px;border-left:5px solid var(--ok)}
+.bar{position:sticky;bottom:0;background:var(--card);border-radius:18px;padding:12px;margin-top:12px;box-shadow:0 -6px 24px #5b3df522;border:1px solid var(--line)}
+.pill{display:inline-block;background:var(--line);border-radius:99px;padding:4px 12px;margin:3px;font-size:14px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14px;overflow:hidden;border-radius:12px;display:block;overflow-x:auto}
+th{background:var(--p);color:#fff;padding:9px;text-align:left}td{padding:9px;border-bottom:1px solid var(--line)}
+.ex{border-left:4px solid var(--p2);padding:4px 12px;margin:8px 0}
+.err{background:#ffd6d6;color:#a61e1e;border-radius:6px;padding:1px 4px;text-decoration:underline wavy #f03e3e}
+.miss{background:#fff0b3;color:#7a5a00;border-radius:6px;padding:1px 4px}
+.load{text-align:center;padding:30px}.dots i{display:inline-block;width:12px;height:12px;margin:4px;border-radius:50%;background:var(--p);animation:b 1s infinite}.dots i:nth-child(2){background:var(--p2);animation-delay:.15s}.dots i:nth-child(3){background:var(--ok);animation-delay:.3s}
+@keyframes b{50%{transform:translateY(-12px)}}
+.prog{height:8px;border-radius:9px;background:var(--line);overflow:hidden}.prog b{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--y));transition:.4s}
+.mic{width:64px;height:64px;border-radius:50%;font-size:26px;border:0;cursor:pointer;background:var(--p2);color:#fff}.mic.on{animation:pulse 1s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 14px #5b7aa655}}
+</style></head><body><div id="root"></div>
+<script>const { useState, useEffect, useRef } = React;
+const API = "/.netlify/functions/ai";
+const call = async (prompt, image, tier, json) => {
+  const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt, image, tier, json }) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || "api");
+  return d.text;
+};
+const ai = async (p) => {
+  const t = await call(p + "\nReturn ONLY valid JSON, no markdown.", null, /^Evaluate/.test(p) ? "smart" : "fast", true);
+  const i = t.search(/[\[{]/), j = Math.max(t.lastIndexOf("]"), t.lastIndexOf("}"));
+  return JSON.parse(t.slice(i, j + 1));
+};
+const aiText = (p, image) => call(p, image, "smart");
+const shrink = (f) => new Promise((res, rej) => {
+  const u = URL.createObjectURL(f), im = new Image();
+  im.onload = () => {
+    const k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement("canvas");
+    c.width = im.width * k;
+    c.height = im.height * k;
+    c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+    res({ type: "image/jpeg", data: c.toDataURL("image/jpeg", 0.85).split(",")[1] });
+    URL.revokeObjectURL(u);
+  };
+  im.onerror = rej;
+  im.src = u;
+});
+const useLS = (k, d) => {
+  const [v, setV] = useState(() => {
+    try {
+      const x = JSON.parse(localStorage.getItem(k));
+      return x != null ? x : d;
+    } catch (e) {
+      return d;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch (e) {
+    }
+  }, [v]);
+  return [v, setV];
+};
+const LV = ["A1", "A2", "B1", "B2", "C1", "C2"];
+const COL = ["#2f4b7c", "#2f6f68", "#5a4f7c", "#8a5a44", "#4a6670", "#6b5b3e", "#3d5a80", "#51606e"];
+const norm = (s) => (s || "").toLocaleLowerCase("tr").trim().replace(/[.!?]/g, "");
+const shuf = (a) => [...a].sort(() => Math.random() - 0.5);
+const speak = (t) => {
+  try {
+    const u = new SpeechSynthesisUtterance(t), vs = speechSynthesis.getVoices();
+    u.lang = "en-US";
+    u.rate = 0.9;
+    const v = vs.find((x) => /^en[-_]US/.test(x.lang)) || vs.find((x) => x.lang.startsWith("en"));
+    if (v) u.voice = v;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  } catch (e) {
+  }
+};
+const TTS = React.createContext(false);
+const Spk = ({ t }) => /* @__PURE__ */ React.createElement("button", { className: "chip", title: "Dinle", onClick: () => speak(t), style: { padding: "3px 10px", fontSize: 14, verticalAlign: "middle" } }, "\u{1F50A} Dinle");
+const Load = ({ t }) => /* @__PURE__ */ React.createElement("div", { className: "load" }, /* @__PURE__ */ React.createElement("div", { className: "dots" }, /* @__PURE__ */ React.createElement("i", null), /* @__PURE__ */ React.createElement("i", null), /* @__PURE__ */ React.createElement("i", null)), /* @__PURE__ */ React.createElement("p", { className: "mut" }, t || "Haz\u0131rlan\u0131yor\u2026"));
+const LevelPick = ({ onPick, title }) => /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, title || "Seviyeni se\xE7"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "Sana uygun i\xE7eri\u011Fi haz\u0131rlayal\u0131m."), /* @__PURE__ */ React.createElement("div", { className: "grid" }, LV.map((l, i) => /* @__PURE__ */ React.createElement("button", { key: l, className: "box", style: { background: COL[i] }, onClick: () => onPick(l) }, l))));
+const FB = [{ w: "apple", en: "A round fruit, usually red or green, that grows on trees.", tr: ["elma"], meanings: ["Bilgisayar markas\u0131 (Apple)"], syn: [], ant: [], idioms: [{ p: "An apple a day keeps the doctor away", m: "Elma yemek sa\u011Fl\u0131kl\u0131d\u0131r" }], col: ["a ripe apple", "apple juice", "apple pie"], ex: ["I eat an apple every morning.", "She gave her teacher a red apple."] }, { w: "house", en: "A building where people live.", tr: ["ev"], meanings: ["Meclis (House of Commons)", "Bar\u0131nd\u0131rmak (fiil)"], syn: ["home"], ant: [], idioms: [{ p: "On the house", m: "I\u015Fletmeden ikram" }], col: ["buy a house", "house price", "a big house"], ex: ["They bought a big house.", "Our house has three rooms."] }];
+const TOPICS = ["Jobs", "Family Members", "Food & Drink", "Travel", "Health", "Education", "Technology", "Weather", "Shopping", "Feelings", "Sports", "Home & Furniture", "Nature & Animals", "Money & Banking", "Clothes", "Transport", "Business", "Law & Crime", "Science", "Art & Culture", "Relationships", "Hobbies", "City Life", "Environment"];
+function Detail({ w }) {
+  var _a, _b, _c, _d, _e, _f, _g, _h;
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, "Anlam\u0131"), /* @__PURE__ */ React.createElement("div", null, w.tr.map((t) => /* @__PURE__ */ React.createElement("span", { className: "pill", key: t }, t))), ((_a = w.meanings) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Di\u011Fer anlamlar\u0131"), w.meanings.map((m) => /* @__PURE__ */ React.createElement("span", { className: "pill", key: m }, m))), (((_b = w.syn) == null ? void 0 : _b.length) > 0 || ((_c = w.ant) == null ? void 0 : _c.length) > 0) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "E\u015F / Z\u0131t anlaml\u0131"), (_d = w.syn) == null ? void 0 : _d.map((s) => /* @__PURE__ */ React.createElement("span", { className: "pill", style: { background: "#e4f1ea", color: "#1f4d36" }, key: s }, "= ", s)), (_e = w.ant) == null ? void 0 : _e.map((s) => /* @__PURE__ */ React.createElement("span", { className: "pill", style: { background: "#f6e3e0", color: "#7a2a20" }, key: s }, "\u2260 ", s))), ((_f = w.col) == null ? void 0 : _f.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "S\u0131k kullan\u0131lan birle\u015Fimler (collocations)"), w.col.map((c) => /* @__PURE__ */ React.createElement("span", { className: "pill", key: c }, c))), ((_g = w.idioms) == null ? void 0 : _g.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "G\xFCnl\xFCk kal\u0131plar"), w.idioms.slice(0, 3).map((x) => /* @__PURE__ */ React.createElement("p", { key: x.p }, /* @__PURE__ */ React.createElement("b", null, "\u201C", x.p, "\u201D"), " ", /* @__PURE__ */ React.createElement("span", { className: "mut" }, "\u2014 ", x.m)))), /* @__PURE__ */ React.createElement("h3", null, "C\xFCmle i\xE7inde"), (_h = w.ex) == null ? void 0 : _h.map((e) => /* @__PURE__ */ React.createElement("div", { className: "ex", key: e }, e, " ", /* @__PURE__ */ React.createElement(Spk, { t: e }))));
+}
+function Card({ w, learn, wrong, fixed, onNext, last }) {
+  const [ph, setPh] = useState("ask"), [v, setV] = useState(""), [st, setSt] = useState(""), [wr, setWr] = useState(false);
+  const auto = React.useContext(TTS);
+  useEffect(() => {
+    if (auto) speak(w.w);
+  }, []);
+  const hit = () => {
+    const b = norm(v);
+    return b && w.tr.some((t) => {
+      const a = norm(t);
+      return a === b || b.length > 2 && a.includes(b);
+    });
+  };
+  const check = () => {
+    if (hit()) {
+      learn(w);
+      if (ph === "type") fixed(w);
+      setSt("good");
+      setPh("done");
+    } else if (ph === "type") {
+      setWr(true);
+      setPh("hint");
+      setV("");
+    } else {
+      learn(w);
+      wrong(w);
+      setSt("miss");
+      setPh("done");
+    }
+  };
+  const giveUp = () => {
+    learn(w);
+    wrong(w);
+    setSt("skip");
+    setPh("done");
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("div", { className: "word" }, w.w), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement(Spk, { t: w.w })), ph === "ask" && /* @__PURE__ */ React.createElement("div", { className: "row", style: { justifyContent: "center" } }, /* @__PURE__ */ React.createElement("p", { style: { width: "100%", textAlign: "center" } }, "Bu kelimeyi biliyor musun?"), /* @__PURE__ */ React.createElement("button", { className: "btn g", onClick: () => setPh("type") }, "Biliyorum"), /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: () => setPh("hint") }, "Bilmiyorum")), ph === "hint" && /* @__PURE__ */ React.createElement("div", { className: "hint" }, /* @__PURE__ */ React.createElement("b", null, wr ? "Tam de\u011Fil. Son bir tahmin hakk\u0131n var." : "\u0130pucu: bir tahmin hakk\u0131n var."), /* @__PURE__ */ React.createElement("p", null, "\u{1F4A1} ", w.en)), (ph === "type" || ph === "hint") && /* @__PURE__ */ React.createElement("div", { className: "bar" }, /* @__PURE__ */ React.createElement("p", { className: "mut", style: { margin: "0 0 8px" } }, "T\xFCrk\xE7e anlam\u0131n\u0131 yaz:"), /* @__PURE__ */ React.createElement("div", { className: "row", style: { flexWrap: "nowrap" } }, /* @__PURE__ */ React.createElement("input", { autoFocus: true, value: v, onChange: (e) => setV(e.target.value), onKeyDown: (e) => e.key === "Enter" && check(), placeholder: "cevab\u0131n\u2026" }), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: check }, "Kontrol")), /* @__PURE__ */ React.createElement("button", { className: "btn o", style: { marginTop: 8 }, onClick: giveUp }, "Bilmiyorum, g\xF6ster")), ph === "done" && /* @__PURE__ */ React.createElement(React.Fragment, null, st === "good" && /* @__PURE__ */ React.createElement("div", { className: "good" }, "Do\u011Fru!"), st === "miss" && /* @__PURE__ */ React.createElement("div", { className: "hint" }, "Bu sefer olmad\u0131, sorun de\u011Fil. \u0130\u015Fte kelimenin tamam\u0131:"), st === "skip" && /* @__PURE__ */ React.createElement("div", { className: "hint" }, "\u0130\u015Fte kelimenin tamam\u0131:"), st !== "good" && /* @__PURE__ */ React.createElement("div", { className: "hint", style: { marginTop: 8 } }, "\u{1F4A1} ", w.en), /* @__PURE__ */ React.createElement(Detail, { w }), /* @__PURE__ */ React.createElement("button", { className: "btn", style: { marginTop: 14 }, onClick: onNext }, last ? "Bitir" : "Sonraki kelime \u2192")));
+}
+function Quiz({ items, title, onExit, wrong, fixed }) {
+  const [pool] = useState(() => shuf(items).map((w2) => ({ w: w2, d: Math.random() < 0.5 }))), [i, setI] = useState(0), [v, setV] = useState(""), [fb, setFb] = useState(null), [sc, setSc] = useState(0);
+  const auto = React.useContext(TTS);
+  useEffect(() => {
+    if (auto && pool[i] && !pool[i].d) speak(pool[i].w.w);
+  }, [i]);
+  if (!pool.length) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("p", null, "Burada hen\xFCz kelime yok."), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: onExit }, "\u2190 Geri"));
+  if (i >= pool.length) return /* @__PURE__ */ React.createElement("div", { className: "card", style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("h2", null, title, " bitti"), /* @__PURE__ */ React.createElement("div", { className: "word" }, sc, "/", pool.length), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: onExit }, "\u2190 Kelimelere d\xF6n"));
+  const { w, d } = pool[i];
+  const go = () => {
+    if (fb) {
+      setFb(null);
+      setV("");
+      setI(i + 1);
+      return;
+    }
+    const b = norm(v);
+    const ok = b && (d ? norm(w.w) === b : w.tr.some((t) => norm(t) === b || b.length > 2 && norm(t).includes(b)));
+    if (ok) {
+      setSc(sc + 1);
+      fixed(w);
+    } else wrong(w);
+    setFb(ok ? "ok" : "bad");
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: onExit }, "\u2190 Geri"), /* @__PURE__ */ React.createElement("p", { className: "mut", style: { marginTop: 10 } }, title, " \xB7 ", i + 1, "/", pool.length), /* @__PURE__ */ React.createElement("div", { className: "prog" }, /* @__PURE__ */ React.createElement("b", { style: { width: i / pool.length * 100 + "%" } })), /* @__PURE__ */ React.createElement("p", { className: "mut", style: { marginTop: 14, textAlign: "center" } }, d ? "T\xFCrk\xE7esi verilen \u0130ngilizce kelimeyi yaz" : "Bu kelimenin T\xFCrk\xE7e anlam\u0131n\u0131 yaz"), /* @__PURE__ */ React.createElement("div", { className: "word", style: { fontSize: 32, margin: "4px 0 12px" } }, d ? w.tr[0] : /* @__PURE__ */ React.createElement(React.Fragment, null, w.w, " ", /* @__PURE__ */ React.createElement(Spk, { t: w.w }))), /* @__PURE__ */ React.createElement("div", { className: "hint" }, "\u{1F4A1} ", w.en), /* @__PURE__ */ React.createElement("div", { className: "bar" }, /* @__PURE__ */ React.createElement("div", { className: "row", style: { flexWrap: "nowrap" } }, /* @__PURE__ */ React.createElement("input", { autoFocus: true, value: v, disabled: !!fb, onChange: (e) => setV(e.target.value), onKeyDown: (e) => e.key === "Enter" && go(), placeholder: d ? "English word\u2026" : "T\xFCrk\xE7e anlam\u0131\u2026" }), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: go }, fb ? "Sonraki" : "Kontrol")), fb && /* @__PURE__ */ React.createElement("p", { className: fb === "ok" ? "good" : "hint", style: { marginTop: 10 } }, fb === "ok" ? "Do\u011Fru! " : "Cevap: ", /* @__PURE__ */ React.createElement("b", null, d ? w.w : w.tr.join(", ")))));
+}
+function Vocab() {
+  const [st, setSt] = useLS("v_store", { learned: {}, wrong: {} });
+  const [td, setTd] = useLS("v_today", { d: "", w: [] });
+  const day = (/* @__PURE__ */ new Date()).toDateString(), tw = td.d === day ? td.w : [];
+  const [view, setView] = useState("pick"), [lv, setLv] = useState(null), [topic, setTopic] = useState(""), [q, setQ] = useState("");
+  const [err, setErr] = useState(false), [words, setWords] = useState([]), [i, setI] = useState(0), [busy, setBusy] = useState(false), [quiz, setQuiz] = useState(null);
+  const learn = (w) => {
+    setSt((s) => ({ ...s, learned: { ...s.learned, [w.w]: w } }));
+    setTd((t) => ({ d: day, w: [...(t.d === day ? t.w : []).filter((x) => x.w !== w.w), w] }));
+  };
+  const wrong = (w) => setSt((s) => ({ ...s, wrong: { ...s.wrong, [w.w]: w } }));
+  const fixed = (w) => setSt((s) => {
+    const n = { ...s.wrong };
+    delete n[w.w];
+    return { ...s, wrong: n };
+  });
+  const load = async (l, t) => {
+    setBusy(true);
+    try {
+      const known = Object.keys(st.learned).slice(-60).join(", ");
+      const r = await ai(`Generate 8 English vocabulary words at CEFR ${l} level${t ? ` on the topic "${t}"` : ""}. Do not use these: ${known}. JSON array of objects: {"w":"word","en":"clear simple English explanation that does NOT contain the word and has no Turkish","tr":["1-4 accepted Turkish translations, lowercase"],"meanings":["other senses, short, in Turkish"],"syn":["synonyms if any"],"ant":["antonyms if any"],"idioms":[{"p":"everyday phrase using it","m":"Turkish meaning"}] (max 3),"col":["3-4 common collocations with the word, e.g. make a decision"],"ex":["2 natural example sentences"]}`);
+      if (!Array.isArray(r) || !r.length) throw 0;
+      setWords(r);
+      setI(0);
+      setView("study");
+      setErr("");
+    } catch (e) {
+      setErr(String(e && e.message || "bo\u015F yan\u0131t"));
+    }
+    setBusy(false);
+  };
+  const start = (l) => {
+    setLv(l);
+    setTopic("");
+    setQ("");
+  };
+  if (quiz) return /* @__PURE__ */ React.createElement(Quiz, { ...quiz, wrong, fixed, onExit: () => {
+    setQuiz(null);
+  } });
+  if (busy) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement(Load, { t: "Kelimeler se\xE7iliyor\u2026" }));
+  if (view === "study") {
+    const w = words[i];
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "row", style: { justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("span", { className: "pill" }, lv, topic && " \xB7 " + topic), /* @__PURE__ */ React.createElement("span", { className: "mut" }, Math.min(i + 1, words.length), "/", words.length)), /* @__PURE__ */ React.createElement("div", { className: "prog" }, /* @__PURE__ */ React.createElement("b", { style: { width: i / words.length * 100 + "%" } })), w ? /* @__PURE__ */ React.createElement(Card, { key: w.w, w, learn, wrong, fixed, last: i === words.length - 1, onNext: () => setI(i + 1) }) : /* @__PURE__ */ React.createElement("div", { className: "card", style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("h2", null, "Tur tamam!"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "Bug\xFCn ", tw.length, " kelime \xE7al\u0131\u015Ft\u0131n."), /* @__PURE__ */ React.createElement("div", { className: "row", style: { justifyContent: "center" } }, /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: () => load(lv, topic) }, "Yeni kelimeler"), /* @__PURE__ */ React.createElement("button", { className: "btn g", onClick: () => setQuiz({ items: tw, title: "Bug\xFCnk\xFC test" }) }, "Kar\u0131\u015F\u0131k sor"))), /* @__PURE__ */ React.createElement("div", { className: "bar row" }, /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: () => setView("pick") }, "\u2190 Ana sayfa"), i > 0 && i <= words.length && /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: () => setI(i - 1) }, "\u2190 \xD6nceki"), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: () => {
+      setView("pick");
+      setLv(null);
+    } }, "Bitir"), /* @__PURE__ */ React.createElement("button", { className: "btn g", onClick: () => setQuiz({ items: tw, title: "Bug\xFCnk\xFC kar\u0131\u015F\u0131k test" }), disabled: !tw.length }, "\xD6\u011Frendiklerimi kar\u0131\u015F\u0131k sor (", tw.length, ")")));
+  }
+  const all = Object.values(st.learned), wr = Object.values(st.wrong);
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Kelime Hazinesi"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "\xD6nce seviyeni se\xE7, istersen bir konu ara."), err && /* @__PURE__ */ React.createElement("p", { className: "hint" }, "Kelimeler getirilemedi (", err, `). Biraz sonra tekrar dene; s\xFCrerse README'deki "Sorun giderme" b\xF6l\xFCm\xFCne bak.`), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("button", { className: "btn g", disabled: !tw.length, onClick: () => setQuiz({ items: tw, title: "Bug\xFCnk\xFC test" }) }, "Bug\xFCnk\xFCleri sor (", tw.length, ")"), /* @__PURE__ */ React.createElement("button", { className: "btn r", disabled: !wr.length, onClick: () => setQuiz({ items: wr, title: "Yanl\u0131\u015Flar\u0131m" }) }, "Yanl\u0131\u015Flar\u0131m (", wr.length, ")"), /* @__PURE__ */ React.createElement("button", { className: "btn o", disabled: !all.length, onClick: () => setQuiz({ items: all, title: "T\xFCm zamanlar" }) }, "T\xFCm kelimelerim (", all.length, ")"))), !lv ? /* @__PURE__ */ React.createElement(LevelPick, { onPick: start }) : /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Seviye ", lv, " ", /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: () => setLv(null) }, "de\u011Fi\u015Ftir")), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: () => load(lv, "") }, "S\u0131radaki kelimelerle ba\u015Fla \u2192"), /* @__PURE__ */ React.createElement("h3", null, "\u2026ya da bir konu se\xE7"), /* @__PURE__ */ React.createElement("input", { placeholder: "\u{1F50D} Konu ara (jobs, family\u2026)", value: q, onChange: (e) => setQ(e.target.value) }), /* @__PURE__ */ React.createElement("div", { className: "row", style: { marginTop: 10 } }, TOPICS.filter((t) => t.toLowerCase().includes(q.toLowerCase())).map((t, k) => /* @__PURE__ */ React.createElement("button", { key: t, className: "chip", style: { borderColor: COL[k % 8] }, onClick: () => {
+    setTopic(t);
+    load(lv, t);
+  } }, t)), q && !TOPICS.some((t) => t.toLowerCase() === q.toLowerCase()) && /* @__PURE__ */ React.createElement("button", { className: "chip on", onClick: () => {
+    setTopic(q);
+    load(lv, q);
+  } }, "\u201C", q, "\u201D konusunu \xE7al\u0131\u015F"))));
+}
+const TEN = ["Present Simple", "Present Continuous", "Present Perfect", "Present Perfect Continuous", "Past Simple", "Past Continuous", "Past Perfect", "Past Perfect Continuous", "Future Simple", "Future Continuous", "Future Perfect", "Future Perfect Continuous"];
+const GM = { "Parts of Speech": ["Nouns", "Pronouns", "Adjectives", "Adverbs", "Prepositions", "Conjunctions", "Interjections"], "Tenses": TEN, "Modals": ["Can / Could", "May / Might", "Must / Have to", "Should / Ought to", "Will / Would / Shall", "Modals in the Past"], "Sentence Structure & Clauses": ["Word Order", "Questions & Negatives", "Relative Clauses", "Noun Clauses", "Adverbial Clauses", "Compound & Complex Sentences"], "Conditionals & Wish Clauses": ["Zero & First Conditional", "Second Conditional", "Third Conditional", "Mixed Conditionals", "Wish / If only"], "Active & Passive Voice - Causatives": ["Passive in Tenses", "Passive with Modals", "Have / Get something done", "Make / Let / Have someone do"], "Reported Speech": ["Statements", "Questions", "Commands & Requests", "Reporting Verbs"], "Verbals: Gerunds & Infinitives": ["Gerunds", "Infinitives", "Verb + Gerund / Infinitive", "Participles"], "Determiners & Quantifiers": ["Articles", "Some / Any", "Much / Many / A lot of", "Few / Little", "Each / Every / All / Both"] };
+function Practice({ main, init }) {
+  const [sel, setSel] = useState(init ? [init] : []), [items, setItems] = useState(null), [busy, setBusy] = useState(false), [ans, setAns] = useState({}), [chk, setChk] = useState(false);
+  const gen = async () => {
+    setBusy(true);
+    setChk(false);
+    setAns({});
+    try {
+      setItems(await ai(`Create 8 fill-in-the-blank English grammar exercises mixing these topics: ${sel.join("; ")}. JSON array: {"q":"sentence with ___ for the blank (and the base verb/word in parentheses if needed)","a":["accepted answers"],"h":"short Turkish hint"}`));
+    } catch (e) {
+      setItems([]);
+    }
+    setBusy(false);
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Peki\u015Ftir"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "\xC7al\u0131\u015Fmak istedi\u011Fin konular\u0131 se\xE7 (birden fazla olabilir):"), /* @__PURE__ */ React.createElement("div", { className: "row" }, GM[main].map((s) => /* @__PURE__ */ React.createElement("button", { key: s, className: "chip" + (sel.includes(s) ? " on" : ""), onClick: () => setSel(sel.includes(s) ? sel.filter((x) => x !== s) : [...sel, s]) }, s))), /* @__PURE__ */ React.createElement("button", { className: "btn", style: { marginTop: 12 }, disabled: !sel.length || busy, onClick: gen }, "Al\u0131\u015Ft\u0131rmay\u0131 haz\u0131rla"), busy && /* @__PURE__ */ React.createElement(Load, null), items && !busy && (items.length ? /* @__PURE__ */ React.createElement("div", null, items.map((it, k) => {
+    const ok = chk && it.a.some((a) => norm(a) === norm(ans[k]));
+    return /* @__PURE__ */ React.createElement("div", { key: k, style: { margin: "14px 0" } }, /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("b", null, k + 1, "."), " ", it.q), /* @__PURE__ */ React.createElement("input", { value: ans[k] || "", onChange: (e) => setAns({ ...ans, [k]: e.target.value }), style: chk ? { borderColor: ok ? "var(--ok)" : "var(--bad)" } : {}, placeholder: it.h }), chk && !ok && /* @__PURE__ */ React.createElement("p", { className: "hint", style: { marginTop: 6 } }, "Do\u011Fru cevap: ", /* @__PURE__ */ React.createElement("b", null, it.a[0])));
+  }), /* @__PURE__ */ React.createElement("button", { className: "btn g", onClick: () => setChk(true) }, "Kontrol et"), " ", /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: gen }, "Yeni sorular")) : /* @__PURE__ */ React.createElement("p", { className: "hint" }, "Sorular haz\u0131rlanamad\u0131, tekrar dene.")));
+}
+function Grammar() {
+  const [main, setMain] = useState(null), [sub, setSub] = useState(null), [les, setLes] = useState(null), [n, setN] = useState(1), [busy, setBusy] = useState(false), [pr, setPr] = useState(false);
+  const open = async (s) => {
+    setSub(s);
+    setLes(null);
+    setN(1);
+    setPr(false);
+    setBusy(true);
+    try {
+      setLes(await ai(`Teach the English grammar topic "${s}" (category: ${main}) to Turkish learners. JSON array of 5 steps: {"title":"short Turkish title","text":"clear Turkish explanation, 2-4 sentences","table":{"head":["col"],"rows":[["cell"]]} or null,"ex":[{"en":"English example","tr":"Turkish translation"}]}. Step 1 = main idea and when to use it, step 2 = form table, then usage patterns, common mistakes, quick summary.`));
+    } catch (e) {
+      setLes([]);
+    }
+    setBusy(false);
+  };
+  if (!main) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Gramer Konular\u0131"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "Bir ana konu se\xE7."), /* @__PURE__ */ React.createElement("div", { className: "grid" }, Object.keys(GM).map((m, k) => /* @__PURE__ */ React.createElement("button", { key: m, className: "box", style: { background: COL[k % 8] }, onClick: () => setMain(m) }, m))));
+  if (!sub) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: () => setMain(null) }, "\u2190 Ana konular"), /* @__PURE__ */ React.createElement("h2", { style: { marginTop: 10 } }, main), /* @__PURE__ */ React.createElement("div", { className: "grid" }, GM[main].map((s, k) => /* @__PURE__ */ React.createElement("button", { key: s, className: "box", style: { background: COL[(k + 2) % 8] }, onClick: () => open(s) }, s))), /* @__PURE__ */ React.createElement("button", { className: "btn o", style: { marginTop: 14 }, onClick: () => {
+    setSub("");
+    setPr(true);
+  } }, "Do\u011Frudan al\u0131\u015Ft\u0131rma yap"));
+  if (pr) return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: () => {
+    setSub(null);
+    setPr(false);
+  } }, "\u2190 ", main), /* @__PURE__ */ React.createElement(Practice, { main, init: sub || null }));
+  if (busy) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement(Load, { t: "Konu haz\u0131rlan\u0131yor\u2026" }));
+  const L = les || [], cur = L.slice(0, n);
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: () => setSub(null) }, "\u2190 ", main), /* @__PURE__ */ React.createElement("h2", { style: { margin: "10px 4px" } }, sub), !L.length && /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("p", null, "\u0130\xE7erik haz\u0131rlanamad\u0131."), /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: () => open(sub) }, "Tekrar dene")), cur.map((s, k) => {
+    var _a, _b;
+    return /* @__PURE__ */ React.createElement("div", { className: "card", key: k, style: { borderTop: `5px solid ${COL[k % 8]}` } }, /* @__PURE__ */ React.createElement("h3", { style: { marginTop: 0, color: COL[k % 8] } }, k + 1, ". ", s.title), /* @__PURE__ */ React.createElement("p", null, s.text), ((_a = s.table) == null ? void 0 : _a.head) && /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, s.table.head.map((h) => /* @__PURE__ */ React.createElement("th", { key: h }, h)))), /* @__PURE__ */ React.createElement("tbody", null, s.table.rows.map((r, x) => /* @__PURE__ */ React.createElement("tr", { key: x }, r.map((c, y) => /* @__PURE__ */ React.createElement("td", { key: y }, c)))))), (_b = s.ex) == null ? void 0 : _b.map((e) => /* @__PURE__ */ React.createElement("div", { className: "ex", key: e.en }, /* @__PURE__ */ React.createElement("b", null, e.en), /* @__PURE__ */ React.createElement("div", { className: "mut" }, e.tr))));
+  }), L.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "bar row" }, n < L.length ? /* @__PURE__ */ React.createElement("button", { className: "btn", onClick: () => setN(n + 1) }, "Devam \u2192") : /* @__PURE__ */ React.createElement("button", { className: "btn g", onClick: () => setPr(true) }, "Peki\u015Ftirmek i\xE7in al\u0131\u015Ft\u0131rma yap"), /* @__PURE__ */ React.createElement("span", { className: "mut" }, Math.min(n, L.length), "/", L.length)));
+}
+function Skill({ kind, go }) {
+  var _a, _b, _c, _d, _e, _f;
+  const sp = kind === "speaking";
+  const [lv, setLv] = useState(null), [task, setTask] = useState(null), [text, setText] = useState(""), [att, setAtt] = useState(0), [res, setRes] = useState(null), [busy, setBusy] = useState(false), [force, setForce] = useState(false), [live, setLive] = useState(false), [noSR, setNoSR] = useState(false), rec = useRef(null), want = useRef(false), [mode, setMode] = useState(sp ? "task" : null), [img, setImg] = useState(null), [ocr, setOcr] = useState(false), [uerr, setUerr] = useState(false);
+  useEffect(() => {
+    setImg({ mediaTypes: ["image/jpeg", "image/png", "image/webp"] });
+  }, []);
+  const up = async (f) => {
+    if (!f) return;
+    setUerr(false);
+    if (f.type.startsWith("image/")) {
+      setOcr(true);
+      try {
+        const r = await aiText("Transcribe exactly the English handwritten or printed text in this image, keeping the original wording and any mistakes. Output only the transcription.", await shrink(f));
+        setText(r.trim());
+      } catch (e) {
+        setUerr(true);
+      }
+      setOcr(false);
+    } else {
+      try {
+        setText(await f.text());
+      } catch (e) {
+        setUerr(true);
+      }
+    }
+  };
+  const own = () => {
+    setMode("own");
+    setLv("own");
+    setText("");
+    setAtt(0);
+    setRes(null);
+    setForce(false);
+    setTask({ own: true, title: "Kendi metnini de\u011Ferlendir", prompt: "Yazd\u0131\u011F\u0131n herhangi bir metni y\xFCkle (foto\u011Fraf veya .txt) ya da yap\u0131\u015Ft\u0131r.", points: [] });
+  };
+  const pick = async (l) => {
+    setLv(l);
+    setBusy(true);
+    setText("");
+    setAtt(0);
+    setRes(null);
+    setForce(false);
+    try {
+      setTask(await ai(`Give a ${kind} task for a Turkish learner at CEFR ${l}. JSON: {"title":"topic title","prompt":"the task in simple English suited to ${l}","points":["3-5 things the learner should cover, in Turkish"]}`));
+    } catch (e) {
+      setTask({ title: "Describe your day", prompt: "Tell us about a normal day in your life.", points: ["Sabah rutinin", "I\u015Fin veya okulun", "Ak\u015Fam yapt\u0131klar\u0131n"] });
+    }
+    setBusy(false);
+  };
+  const mic = () => {
+    var _a2;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      setNoSR(true);
+      return;
+    }
+    if (live) {
+      want.current = false;
+      (_a2 = rec.current) == null ? void 0 : _a2.stop();
+      return;
+    }
+    const r = new SR();
+    r.lang = "en-US";
+    r.continuous = true;
+    r.interimResults = true;
+    let base = text, last = text;
+    r.onresult = (e) => {
+      let t = "";
+      for (let k = 0; k < e.results.length; k++) t += e.results[k][0].transcript;
+      last = (base ? base + " " : "") + t;
+      setText(last);
+    };
+    r.onend = () => {
+      if (want.current) {
+        base = last;
+        try {
+          r.start();
+        } catch (e) {
+          setLive(false);
+        }
+      } else setLive(false);
+    };
+    r.onerror = (e) => {
+      if (e.error === "no-speech" || e.error === "aborted") return;
+      want.current = false;
+      setLive(false);
+      setNoSR(e.error || "x");
+    };
+    rec.current = r;
+    want.current = true;
+    r.start();
+    setLive(true);
+  };
+  const submit = async () => {
+    var _a2;
+    want.current = false;
+    if (live) (_a2 = rec.current) == null ? void 0 : _a2.stop();
+    setBusy(true);
+    setForce(false);
+    try {
+      setRes(await ai(`Evaluate this ${kind} answer by a Turkish learner (CEFR ${task.own ? "unknown" : lv}) ${task.own ? "(free text on a topic the learner chose; there is no set task, so return missing as an empty array and estimate the CEFR level)" : `for the task "${task.prompt}". Points to cover: ${task.points.join("; ")}.`}
+Text:
+"""${text}"""
+JSON: {"score":0-100,"areas":["3-5 TOPIC-LEVEL weaknesses in Turkish (e.g. 'Ge\xE7mi\u015F zaman kullan\u0131m\u0131', 'Edat se\xE7imi') WITHOUT quoting the exact mistakes"],"covered":["points covered, Turkish"],"missing":["points not covered, Turkish"],"segments":[{"t":"text chunk","wrong":false,"note":"Turkish explanation if wrong, else empty"}] (segments MUST concatenate to exactly reproduce the original text, mark only wrong chunks),"suggest":[{"tab":"grammar or vocab","label":"Turkish suggestion e.g. 'Past Simple konusunu tekrar et'"}]}`));
+      setAtt(att + 1);
+    } catch (e) {
+      setRes({ err: 1 });
+    }
+    setBusy(false);
+  };
+  if (!lv) {
+    if (!sp && !mode) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Yazma prati\u011Fi"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "Nas\u0131l \xE7al\u0131\u015Fmak istersin?"), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement("button", { className: "box", style: { background: COL[3] }, onClick: () => setMode("task") }, "Verilen konuda yaz"), /* @__PURE__ */ React.createElement("button", { className: "box", style: { background: COL[1] }, onClick: own }, "Kendi metnimi y\xFCkle")));
+    return /* @__PURE__ */ React.createElement(LevelPick, { title: sp ? "Konu\u015Fma prati\u011Fi" : "Yazma prati\u011Fi", onPick: pick });
+  }
+  if (busy && !task) return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement(Load, { t: "Konu haz\u0131rlan\u0131yor\u2026" }));
+  if (!task) return null;
+  const detailed = res && !res.err && (att >= 3 || force);
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "card", style: { borderTop: "5px solid var(--p2)" } }, /* @__PURE__ */ React.createElement("div", { className: "row", style: { justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("span", { className: "pill" }, task.own ? "Kendi metnim" : lv), /* @__PURE__ */ React.createElement("button", { className: "chip", onClick: () => {
+    setLv(null);
+    setTask(null);
+    setRes(null);
+    setText("");
+    setAtt(0);
+    setMode(sp ? "task" : null);
+  } }, "\u2190 Geri")), /* @__PURE__ */ React.createElement("h2", null, task.title), /* @__PURE__ */ React.createElement("p", null, task.prompt), !task.own && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Anlatman gerekenler"), task.points.map((p) => /* @__PURE__ */ React.createElement("span", { className: "pill", key: p }, "\u2714 ", p)))), /* @__PURE__ */ React.createElement("div", { className: "card" }, sp && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", marginBottom: 12 } }, /* @__PURE__ */ React.createElement("button", { className: "mic" + (live ? " on" : ""), onClick: mic }, live ? "\u25A0" : "\u{1F399}"), /* @__PURE__ */ React.createElement("p", { className: "mut" }, live ? "Dinleniyor\u2026 konu\u015F!" : "Konu\u015Fmak i\xE7in mikrofona dokun"), noSR && /* @__PURE__ */ React.createElement("p", { className: "hint" }, noSR === true ? "Bu taray\u0131c\u0131 canl\u0131 konu\u015Fma tan\u0131may\u0131 desteklemiyor (Chrome veya Edge \xF6neririz)." : "Mikrofon kullan\u0131lamad\u0131 (" + noSR + "). Taray\u0131c\u0131da mikrofon iznini a\xE7; sayfa g\xF6m\xFCl\xFC a\xE7\u0131ld\u0131ysa yeni sekmede a\xE7may\u0131 dene. \u015Eimdilik metni yazarak girebilirsin.")), /* @__PURE__ */ React.createElement("textarea", { value: text, onChange: (e) => setText(e.target.value), placeholder: sp ? "Konu\u015Fman burada metne d\xF6n\xFC\u015F\xFCr (d\xFCzenleyebilirsin)\u2026" : "Metnini buraya yaz ya da yap\u0131\u015Ft\u0131r\u2026" }), /* @__PURE__ */ React.createElement("div", { className: "row", style: { marginTop: 10 } }, !sp && /* @__PURE__ */ React.createElement("label", { className: "btn o" }, "\u{1F4CE} Dosya / foto\u011Fraf y\xFCkle", /* @__PURE__ */ React.createElement("input", { type: "file", accept: ".txt,.md,text/plain" + (img ? "," + img.mediaTypes.join(",") : ""), hidden: true, onChange: (e) => {
+    up(e.target.files[0]);
+    e.target.value = "";
+  } })), ocr && /* @__PURE__ */ React.createElement("span", { className: "mut" }, "Foto\u011Fraftaki metin okunuyor\u2026"), uerr && /* @__PURE__ */ React.createElement("span", { className: "hint" }, "Dosya okunamad\u0131. .txt veya foto\u011Fraf dene ya da metni yap\u0131\u015Ft\u0131r."), /* @__PURE__ */ React.createElement("button", { className: "btn", disabled: busy || text.trim().length < 10, onClick: submit }, att ? "Tekrar g\xF6nder" : "G\xF6nder"))), busy && /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement(Load, { t: "De\u011Ferlendiriliyor\u2026" })), (res == null ? void 0 : res.err) && /* @__PURE__ */ React.createElement("div", { className: "card hint" }, "De\u011Ferlendirme \u015Fu an yap\u0131lamad\u0131, tekrar dene."), res && !res.err && !busy && /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("h2", null, "Deneme ", att, " \xB7 ", res.score, "/100"), /* @__PURE__ */ React.createElement("div", { className: "prog" }, /* @__PURE__ */ React.createElement("b", { style: { width: res.score + "%" } })), !detailed ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xDCzerinde \xE7al\u0131\u015F\u0131lacak konular"), (_a = res.areas) == null ? void 0 : _a.map((a) => /* @__PURE__ */ React.createElement("span", { className: "pill", key: a }, "\u{1F3AF} ", a)), ((_b = res.missing) == null ? void 0 : _b.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Hen\xFCz anlatmad\u0131\u011F\u0131n noktalar"), res.missing.map((a) => /* @__PURE__ */ React.createElement("span", { className: "pill", style: { background: "#fff0b3", color: "#7a5a00" }, key: a }, a))), /* @__PURE__ */ React.createElement("p", { className: "mut" }, "Bu ba\u015Fl\u0131klara bak\u0131p metnini d\xFCzeltip tekrar g\xF6nder. Hatalar\u0131 kendin bulmaya \xE7al\u0131\u015F!"), /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: () => setForce(true) }, "Hatalar\u0131 \u015Fimdi g\xF6ster")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Metnin ve hatalar"), /* @__PURE__ */ React.createElement("p", { style: { lineHeight: 2 } }, (_c = res.segments) == null ? void 0 : _c.map((s, k) => s.wrong ? /* @__PURE__ */ React.createElement("span", { key: k, className: "err", title: s.note }, s.t) : /* @__PURE__ */ React.createElement("span", { key: k }, s.t))), (_d = res.segments) == null ? void 0 : _d.filter((s) => s.wrong).map((s, k) => /* @__PURE__ */ React.createElement("p", { key: k, className: "mut" }, "\u{1F534} ", /* @__PURE__ */ React.createElement("b", null, s.t), " \u2192 ", s.note)), ((_e = res.missing) == null ? void 0 : _e.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Eksik kalan noktalar"), res.missing.map((a) => /* @__PURE__ */ React.createElement("p", { key: a }, /* @__PURE__ */ React.createElement("span", { className: "miss" }, a))))), detailed && ((_f = res.suggest) == null ? void 0 : _f.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Sana \xF6nerilerimiz"), res.suggest.map((s) => /* @__PURE__ */ React.createElement("div", { key: s.label, className: "row", style: { margin: "6px 0" } }, /* @__PURE__ */ React.createElement("span", null, "\u{1F449} ", s.label), /* @__PURE__ */ React.createElement("button", { className: "btn o", onClick: () => go(s.tab === "vocab" ? 0 : 1) }, s.tab === "vocab" ? "Kelimeye git" : "Gramere git"))))));
+}
+function App() {
+  const [tab, setTab] = useState(0), [tts, setTts] = useLS("tts", false);
+  const T = [["\u{1F4DA}", "Vocabulary"], ["\u{1F9E9}", "Grammar"], ["\u{1F3A4}", "Speaking"], ["\u270D\uFE0F", "Writing"]];
+  return /* @__PURE__ */ React.createElement(TTS.Provider, { value: tts }, /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "row", style: { justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, "Lingua Ladder \xB7 A1 \u2192 C2"), /* @__PURE__ */ React.createElement("button", { className: "chip" + (tts ? " on" : ""), onClick: () => setTts(!tts) }, "\u{1F50A} Otomatik sesli okuma: ", tts ? "A\xE7\u0131k" : "Kapal\u0131")), /* @__PURE__ */ React.createElement("div", { className: "tabs" }, T.map((t, k) => /* @__PURE__ */ React.createElement("button", { key: k, className: `tab t${k}${tab === k ? " on" : ""}`, onClick: () => setTab(k) }, t[1]))), tab === 0 && /* @__PURE__ */ React.createElement(Vocab, null), tab === 1 && /* @__PURE__ */ React.createElement(Grammar, null), tab === 2 && /* @__PURE__ */ React.createElement(Skill, { key: "s", kind: "speaking", go: setTab }), tab === 3 && /* @__PURE__ */ React.createElement(Skill, { key: "w", kind: "writing", go: setTab })));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(App, null));
+</script></body></html>
